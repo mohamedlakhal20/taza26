@@ -227,11 +227,11 @@
             position: relative;
             height: 200px;
             overflow: hidden;
-            width: 100%;
         }
         
-        .slides-container {
+        .product-slides {
             display: flex;
+            width: 100%;
             height: 100%;
             transition: transform 0.5s ease;
         }
@@ -239,15 +239,13 @@
         .product-slide {
             min-width: 100%;
             height: 100%;
-            position: relative;
         }
         
-        .product-slide img,
-        .product-slide video {
+        .product-slide img, .product-slide video {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
+            transition: transform 0.5s ease;
         }
         
         .product-slider {
@@ -572,6 +570,7 @@
         <button class="category-btn" onclick="filterProducts('أثاث')">أثاث</button>
         <button class="category-btn" onclick="filterProducts('إلكترونيات')">إلكترونيات</button>
         <button class="category-btn" onclick="filterProducts('ملابس')">ملابس</button>
+        <button class="category-btn" onclick="filterProducts('أجهزة منزلية')">أجهزة منزلية</button>
     </div>
 
     <div class="search-container">
@@ -641,19 +640,22 @@
     </footer>
 
     <script>
-        // قائمة المنتجات
+        // قائمة المنتجات مع صور متعددة لكل منتج
         const products = [
             {
                 id: 1,
                 name: "طاولة خشب ممتاز",
                 category: "أثاث",
                 media: [
-                    {type: 'image', url: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
+                    {type: 'image', url: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+                    {type: 'image', url: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+                    {type: 'image', url: "https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
                 ],
-                description: "طاولة خشب عالي الجودة بمقاس 120×60 سم",
+                description: "طاولة خشب عالي الجودة مصنوعة من خشب السنديان الطبيعي، مقاس 120×60 سم، مناسبة للمنازل والمكاتب. تأتي مع ضمان لمدة عامين ضد عيوب الصناعة.",
                 price: "450 درهم",
                 likes: 12,
-                whatsapp: "212694948239"
+                whatsapp: "212694948239",
+                phone: "+212694948239"
             },
             {
                 id: 2,
@@ -661,12 +663,14 @@
                 category: "إلكترونيات",
                 media: [
                     {type: 'image', url: "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
+                    {type: 'video', url: "https://example.com/videos/phone.mp4", poster: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
                     {type: 'image', url: "https://images.unsplash.com/photo-1589492477829-5e65395b66cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
                 ],
-                description: "هاتف ذكي بمواصفات عالية، شاشة 6.5 بوصة",
+                description: "هاتف ذكي بمواصفات عالية، شاشة 6.5 بوصة بدقة Full HD+، كاميرا خلفية رباعية بدقة 48 ميجابكسل، معالج ثماني النواة، ذاكرة RAM 6GB، تخزين داخلي 128GB مع إمكانية التوسعة.",
                 price: "1200 درهم",
                 likes: 34,
-                whatsapp: "212694948239"
+                whatsapp: "212694948239",
+                phone: "+212694948239"
             },
             {
                 id: 3,
@@ -677,12 +681,16 @@
                     {type: 'image', url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
                     {type: 'image', url: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
                 ],
-                description: "حذاء رياضي مريح ومتين لجميع أنواع الرياضة",
+                description: "حذاء رياضي مريح ومتين، مصنوع من مواد عالية الجودة، مناسب لجميع أنواع الرياضة. يحتوي على نعل داخلي مريح يدعم القدم ويقلل من الإجهاد، مع تصميم عصري وجذاب.",
                 price: "200 درهم",
                 likes: 8,
-                whatsapp: "212694948239"
+                whatsapp: "212694948239",
+                phone: "+212694948239"
             }
         ];
+
+        // جميع الفئات المتاحة
+        const allCategories = ["all", ...new Set(products.map(product => product.category))];
 
         // عرض المنتجات عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', function() {
@@ -709,32 +717,31 @@
                 let dotsHTML = '';
                 
                 product.media.forEach((item, index) => {
-                    const activeClass = index === 0 ? 'active' : '';
                     if (item.type === 'image') {
                         slidesHTML += `
-                            <div class="product-slide ${activeClass}">
+                            <div class="product-slide">
                                 <img src="${item.url}" alt="${product.name}" loading="lazy">
                             </div>
                         `;
-                    } else {
+                    } else if (item.type === 'video') {
                         slidesHTML += `
-                            <div class="product-slide ${activeClass}">
+                            <div class="product-slide">
                                 <video src="${item.url}" poster="${item.poster}" autoplay muted loop playsinline></video>
                             </div>
                         `;
                     }
                     
-                    if (product.media.length > 1) {
-                        dotsHTML += `<div class="slider-dot ${activeClass}" data-index="${index}"></div>`;
-                    }
+                    dotsHTML += `<div class="slider-dot ${index === 0 ? 'active' : ''}" data-slide-index="${index}"></div>`;
                 });
                 
                 productElement.innerHTML = `
                     <div class="product-slider-container">
-                        <div class="slides-container">
+                        <div class="product-slides">
                             ${slidesHTML}
                         </div>
-                        ${product.media.length > 1 ? `<div class="product-slider">${dotsHTML}</div>` : ''}
+                        <div class="product-slider">
+                            ${dotsHTML}
+                        </div>
                     </div>
                     <div class="product-content">
                         <h3 class="product-title">${product.name}</h3>
@@ -752,21 +759,32 @@
                 `;
                 
                 container.appendChild(productElement);
-                
-                if (product.media.length > 1) {
-                    initSlider(product.id, product.media.length);
-                }
             });
+            
+            // بدء الشرائح التلقائية
+            startSliders(productsToDisplay);
         }
 
         // إعداد مستمعي الأحداث
         function setupEventListeners() {
-            // النقر على المنتج لفتح النافذة
+            // النقر على النقاط لتغيير الشرائح
             document.addEventListener('click', function(e) {
-                if (e.target.closest('.product') && !e.target.classList.contains('like-btn') && !e.target.classList.contains('slider-dot')) {
-                    const productId = e.target.closest('.product').getAttribute('data-id');
+                if (e.target.classList.contains('slider-dot')) {
+                    const productElement = e.target.closest('.product');
+                    const productId = productElement.getAttribute('data-id');
+                    const slideIndex = parseInt(e.target.getAttribute('data-slide-index'));
                     const product = products.find(p => p.id == productId);
-                    if (product) openModal(product);
+                    
+                    if (product && product.sliderInterval) {
+                        clearInterval(product.sliderInterval);
+                        updateSlider(productElement, slideIndex);
+                        
+                        // إعادة تشغيل الإنترفال بعد التغيير اليدوي
+                        product.sliderInterval = setInterval(() => {
+                            let newIndex = (slideIndex + 1) % product.media.length;
+                            updateSlider(productElement, newIndex);
+                        }, 3000);
+                    }
                 }
                 
                 // النقر على زر الإعجاب
@@ -774,45 +792,61 @@
                     const productId = e.target.id.replace('like-', '');
                     likeProduct(productId);
                 }
+                
+                // النقر على المنتج لفتح النافذة
+                if (e.target.closest('.product') && !e.target.classList.contains('like-btn') && !e.target.classList.contains('slider-dot')) {
+                    const productId = e.target.closest('.product').getAttribute('data-id');
+                    const product = products.find(p => p.id == productId);
+                    if (product) openModal(product);
+                }
             });
         }
 
-        // تهيئة السلايدر
-        function initSlider(productId, mediaCount) {
-            const productElement = document.querySelector(`.product[data-id="${productId}"]`);
-            const slidesContainer = productElement.querySelector('.slides-container');
-            const slides = productElement.querySelectorAll('.product-slide');
+        // بدء الشرائح التلقائية
+        function startSliders(productsToDisplay) {
+            productsToDisplay.forEach(product => {
+                if (product.media.length > 1) {
+                    let currentSlide = 0;
+                    const productElement = document.querySelector(`.product[data-id="${product.id}"]`);
+                    const slidesContainer = productElement.querySelector('.product-slides');
+                    const dots = productElement.querySelectorAll('.slider-dot');
+                    
+                    if (!slidesContainer || dots.length === 0) return;
+                    
+                    // نحرك الشريحة الأولى مباشرة
+                    slidesContainer.style.transition = 'transform 0.5s ease';
+                    slidesContainer.style.transform = 'translateX(0)';
+                    
+                    const slideInterval = setInterval(() => {
+                        currentSlide = (currentSlide + 1) % product.media.length;
+                        slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+                        
+                        // تحديث النقاط النشطة
+                        dots.forEach((dot, index) => {
+                            dot.classList.toggle('active', index === currentSlide);
+                        });
+                    }, 3000);
+                    
+                    // حفظ الإنترفال للتخلص منه لاحقاً إذا لزم الأمر
+                    product.sliderInterval = slideInterval;
+                }
+            });
+        }
+
+        // تحديث الشريحة
+        function updateSlider(productElement, slideIndex) {
+            const slidesContainer = productElement.querySelector('.product-slides');
             const dots = productElement.querySelectorAll('.slider-dot');
-            let currentIndex = 0;
             
-            slidesContainer.style.width = `${mediaCount * 100}%`;
-            slides.forEach(slide => {
-                slide.style.width = `${100 / mediaCount}%`;
-            });
+            if (slidesContainer) {
+                slidesContainer.style.transform = `translateX(-${slideIndex * 100}%)`;
+            }
             
-            const goToSlide = (index) => {
-                const slideWidth = 100 / mediaCount;
-                slidesContainer.style.transform = `translateX(-${index * slideWidth}%)`;
-                
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === index);
+            if (dots && dots.length > 0) {
+                dots.forEach((dot, index) => {
+                    dot.classList.toggle('active', index == slideIndex);
                 });
-                
-                currentIndex = index;
-            };
-            
-            const slideInterval = setInterval(() => {
-                const nextIndex = (currentIndex + 1) % mediaCount;
-                goToSlide(nextIndex);
-            }, 3000);
-            
-            dots.forEach(dot => {
-                dot.addEventListener('click', () => {
-                    clearInterval(slideInterval);
-                    const targetIndex = parseInt(dot.getAttribute('data-index'));
-                    goToSlide(targetIndex);
-                });
-            });
+            }
         }
 
         // دالة لفتح نافذة المنتج
