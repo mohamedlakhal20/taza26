@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TazaShop - تسوق من مدينتك</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3081/3081840.png">
     <style>
         :root {
             --primary-color: #e74c3c;
@@ -237,6 +239,7 @@
             height: 200px;
             overflow: hidden;
             width: 100%;
+            background-color: #f5f5f5;
         }
         
         .slides-container {
@@ -251,13 +254,16 @@
             height: 100%;
             position: relative;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .product-slide img,
         .product-slide video {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             display: block;
         }
         
@@ -586,6 +592,10 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Favicon متعدد الأحجام -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://cdn-icons-png.flaticon.com/512/3081/3081840.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://cdn-icons-png.flaticon.com/512/3081/3081840.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://cdn-icons-png.flaticon.com/512/3081/3081840.png">
 </head>
 <body>
     <header>
@@ -859,7 +869,7 @@
             });
         }
 
-        // تهيئة السلايدر
+        // تهيئة السلايدر (معدلة تماماً)
         function initSlider(productId, mediaCount) {
             const productElement = document.querySelector(`.product[data-id="${productId}"]`);
             const slidesContainer = productElement.querySelector('.slides-container');
@@ -867,55 +877,95 @@
             const dots = productElement.querySelectorAll('.slider-dot');
             let currentIndex = 0;
             let slideInterval;
+            let isHovering = false;
             
-            // ضبط عرض السلايدر
+            // ضبط عرض الشرائح
             slidesContainer.style.width = `${mediaCount * 100}%`;
             slides.forEach(slide => {
                 slide.style.width = `${100 / mediaCount}%`;
             });
             
+            // الانتقال إلى شريحة محددة
             const goToSlide = (index) => {
-                if (index < 0) index = mediaCount - 1;
+                // التأكد من أن الفهرس ضمن الحدود
                 if (index >= mediaCount) index = 0;
-                
-                const slideWidth = 100 / mediaCount;
-                slidesContainer.style.transform = `translateX(-${index * slideWidth}%)`;
-                
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === index);
-                });
+                if (index < 0) index = mediaCount - 1;
                 
                 currentIndex = index;
-            };
-            
-            const startSlider = () => {
-                slideInterval = setInterval(() => {
-                    goToSlide(currentIndex + 1);
-                }, 3000);
+                const slideWidth = 100 / mediaCount;
+                slidesContainer.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+                
+                // تحديث النقاط النشطة
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentIndex);
+                });
             };
             
             // بدء السلايدر التلقائي
+            const startSlider = () => {
+                if (!isHovering && mediaCount > 1) {
+                    slideInterval = setInterval(() => {
+                        goToSlide(currentIndex + 1);
+                    }, 3000);
+                }
+            };
+            
+            // إيقاف السلايدر
+            const stopSlider = () => {
+                clearInterval(slideInterval);
+            };
+            
+            // بدء التشغيل الأولي
             startSlider();
             
             // إضافة تفاعل النقاط
             dots.forEach(dot => {
-                dot.addEventListener('click', () => {
-                    clearInterval(slideInterval);
+                dot.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     const targetIndex = parseInt(dot.getAttribute('data-index'));
                     goToSlide(targetIndex);
+                    stopSlider();
                     startSlider();
                 });
             });
             
-            // إيقاف السلايدر عند hover
+            // إيقاف السلايدر عند التمرير فوقه
             productElement.querySelector('.product-slider-container').addEventListener('mouseenter', () => {
-                clearInterval(slideInterval);
+                isHovering = true;
+                stopSlider();
             });
             
-            // استئناف السلايدر عند مغادرة hover
+            // استئناف السلايدر عند مغادرة التمرير
             productElement.querySelector('.product-slider-container').addEventListener('mouseleave', () => {
+                isHovering = false;
                 startSlider();
             });
+            
+            // إضافة التنقل بالسحب على الأجهزة المحمولة
+            let touchStartX = 0;
+            let touchEndX = 0;
+            
+            productElement.querySelector('.product-slider-container').addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+                stopSlider();
+            }, {passive: true});
+            
+            productElement.querySelector('.product-slider-container').addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+                startSlider();
+            }, {passive: true});
+            
+            const handleSwipe = () => {
+                const diff = touchStartX - touchEndX;
+                if (diff > 50) {
+                    // سحب لليسار - التالي
+                    goToSlide(currentIndex + 1);
+                } else if (diff < -50) {
+                    // سحب لليمين - السابق
+                    goToSlide(currentIndex - 1);
+                }
+            };
         }
 
         // دالة لفتح نافذة المنتج
