@@ -240,6 +240,9 @@
             overflow: hidden;
             width: 100%;
             background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .slides-container {
@@ -259,12 +262,17 @@
             justify-content: center;
         }
         
-        .product-slide img,
-        .product-slide video {
-            width: 100%;
-            height: 100%;
+        .product-slide img {
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
             display: block;
+        }
+        
+        .product-slide .broken-image {
+            width: 80px;
+            height: 80px;
+            opacity: 0.3;
         }
         
         .product-slider {
@@ -592,10 +600,6 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Favicon متعدد الأحجام -->
-    <link rel="icon" type="image/png" sizes="32x32" href="https://cdn-icons-png.flaticon.com/512/3081/3081840.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://cdn-icons-png.flaticon.com/512/3081/3081840.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://cdn-icons-png.flaticon.com/512/3081/3081840.png">
 </head>
 <body>
     <header>
@@ -713,16 +717,15 @@
     </footer>
 
     <script>
-        // قائمة المنتجات
+        // قائمة المنتجات المعدلة مع روابط صور مؤكدة
         const products = [
             {
                 id: 1,
                 name: "طاولة خشب ممتاز",
                 category: "أثاث",
                 media: [
-                    {type: 'image', url: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
-                    {type: 'image', url: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
-                    {type: 'image', url: "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
+                    {type: 'image', url: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"},
+                    {type: 'image', url: "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}
                 ],
                 description: "طاولة خشب عالي الجودة بمقاس 120×60 سم، مناسبة للمنازل والمكاتب. مصنوعة من خشب السنديان الطبيعي، مع تشطيب عالي الجودة.",
                 price: "450 درهم",
@@ -734,9 +737,8 @@
                 name: "هاتف ذكي جديد",
                 category: "إلكترونيات",
                 media: [
-                    {type: 'image', url: "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
-                    {type: 'image', url: "https://images.unsplash.com/photo-1589492477829-5e65395b66cc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
-                    {type: 'image', url: "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
+                    {type: 'image', url: "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"},
+                    {type: 'image', url: "https://images.unsplash.com/photo-1589492477829-5e65395b66cc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}
                 ],
                 description: "هاتف ذكي بمواصفات عالية، شاشة 6.5 بوصة بدقة Full HD+، معالج ثماني النواة، كاميرا خلفية ثلاثية 48+12+5 ميجابكسل، بطارية 4000 مللي أمبير.",
                 price: "1200 درهم",
@@ -748,9 +750,8 @@
                 name: "حذاء رياضي",
                 category: "ملابس",
                 media: [
-                    {type: 'image', url: "https://images.unsplash.com/photo-1600269452121-4f2416e55c28?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
-                    {type: 'image', url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"},
-                    {type: 'image', url: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"}
+                    {type: 'image', url: "https://images.unsplash.com/photo-1600269452121-4f2416e55c28?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"},
+                    {type: 'image', url: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}
                 ],
                 description: "حذاء رياضي مريح ومتين لجميع أنواع الرياضة، مصنوع من مواد عالية الجودة توفر الراحة والدعم للقدمين. متوفر بمقاسات من 38 إلى 45.",
                 price: "200 درهم",
@@ -759,13 +760,7 @@
             }
         ];
 
-        // عرض المنتجات عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', function() {
-            displayProducts(products);
-            setupEventListeners();
-        });
-
-        // دالة لعرض المنتجات
+        // دالة لعرض المنتجات (معدلة لضمان ظهور الصور)
         function displayProducts(productsToDisplay) {
             const container = document.getElementById('products-container');
             container.innerHTML = '';
@@ -785,19 +780,13 @@
                 
                 product.media.forEach((item, index) => {
                     const activeClass = index === 0 ? 'active' : '';
-                    if (item.type === 'image') {
-                        slidesHTML += `
-                            <div class="product-slide ${activeClass}">
-                                <img src="${item.url}" alt="${product.name}" loading="lazy">
-                            </div>
-                        `;
-                    } else {
-                        slidesHTML += `
-                            <div class="product-slide ${activeClass}">
-                                <video src="${item.url}" poster="${item.poster}" autoplay muted loop playsinline></video>
-                            </div>
-                        `;
-                    }
+                    slidesHTML += `
+                        <div class="product-slide ${activeClass}">
+                            <img src="${item.url}" alt="${product.name}" 
+                                 onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"%3E%3Crect width=\"100\" height=\"100\" fill=\"%23eee\"/%3E%3Ctext x=\"50\" y=\"50\" font-family=\"sans-serif\" font-size=\"16\" fill=\"%23666\" text-anchor=\"middle\" dominant-baseline=\"middle\"%3Eصورة غير متوفرة%3C/text%3E%3C/svg%3E';
+                                 this.classList.add('broken-image')">
+                        </div>
+                    `;
                     
                     if (product.media.length > 1) {
                         dotsHTML += `<div class="slider-dot ${activeClass}" data-index="${index}"></div>`;
@@ -869,7 +858,7 @@
             });
         }
 
-        // تهيئة السلايدر (معدلة تماماً)
+        // تهيئة السلايدر (معدلة لضمان العمل الصحيح)
         function initSlider(productId, mediaCount) {
             const productElement = document.querySelector(`.product[data-id="${productId}"]`);
             const slidesContainer = productElement.querySelector('.slides-container');
@@ -877,95 +866,55 @@
             const dots = productElement.querySelectorAll('.slider-dot');
             let currentIndex = 0;
             let slideInterval;
-            let isHovering = false;
             
-            // ضبط عرض الشرائح
+            // ضبط عرض السلايدر
             slidesContainer.style.width = `${mediaCount * 100}%`;
             slides.forEach(slide => {
                 slide.style.width = `${100 / mediaCount}%`;
             });
             
-            // الانتقال إلى شريحة محددة
             const goToSlide = (index) => {
-                // التأكد من أن الفهرس ضمن الحدود
-                if (index >= mediaCount) index = 0;
                 if (index < 0) index = mediaCount - 1;
+                if (index >= mediaCount) index = 0;
+                
+                const slideWidth = 100 / mediaCount;
+                slidesContainer.style.transform = `translateX(-${index * slideWidth}%)`;
+                
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
                 
                 currentIndex = index;
-                const slideWidth = 100 / mediaCount;
-                slidesContainer.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
-                
-                // تحديث النقاط النشطة
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === currentIndex);
-                });
+            };
+            
+            const startSlider = () => {
+                slideInterval = setInterval(() => {
+                    goToSlide(currentIndex + 1);
+                }, 3000);
             };
             
             // بدء السلايدر التلقائي
-            const startSlider = () => {
-                if (!isHovering && mediaCount > 1) {
-                    slideInterval = setInterval(() => {
-                        goToSlide(currentIndex + 1);
-                    }, 3000);
-                }
-            };
-            
-            // إيقاف السلايدر
-            const stopSlider = () => {
-                clearInterval(slideInterval);
-            };
-            
-            // بدء التشغيل الأولي
             startSlider();
             
             // إضافة تفاعل النقاط
             dots.forEach(dot => {
-                dot.addEventListener('click', (e) => {
-                    e.stopPropagation();
+                dot.addEventListener('click', () => {
+                    clearInterval(slideInterval);
                     const targetIndex = parseInt(dot.getAttribute('data-index'));
                     goToSlide(targetIndex);
-                    stopSlider();
                     startSlider();
                 });
             });
             
-            // إيقاف السلايدر عند التمرير فوقه
+            // إيقاف السلايدر عند hover
             productElement.querySelector('.product-slider-container').addEventListener('mouseenter', () => {
-                isHovering = true;
-                stopSlider();
+                clearInterval(slideInterval);
             });
             
-            // استئناف السلايدر عند مغادرة التمرير
+            // استئناف السلايدر عند مغادرة hover
             productElement.querySelector('.product-slider-container').addEventListener('mouseleave', () => {
-                isHovering = false;
                 startSlider();
             });
-            
-            // إضافة التنقل بالسحب على الأجهزة المحمولة
-            let touchStartX = 0;
-            let touchEndX = 0;
-            
-            productElement.querySelector('.product-slider-container').addEventListener('touchstart', (e) => {
-                touchStartX = e.changedTouches[0].screenX;
-                stopSlider();
-            }, {passive: true});
-            
-            productElement.querySelector('.product-slider-container').addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-                startSlider();
-            }, {passive: true});
-            
-            const handleSwipe = () => {
-                const diff = touchStartX - touchEndX;
-                if (diff > 50) {
-                    // سحب لليسار - التالي
-                    goToSlide(currentIndex + 1);
-                } else if (diff < -50) {
-                    // سحب لليمين - السابق
-                    goToSlide(currentIndex - 1);
-                }
-            };
         }
 
         // دالة لفتح نافذة المنتج
@@ -992,6 +941,9 @@
                 if (media.type === 'image') {
                     if (index === 0) {
                         mainImage.src = media.url;
+                        mainImage.onerror = function() {
+                            this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect width="100" height="100" fill="%23eee"/%3E%3Ctext x="50" y="50" font-family="sans-serif" font-size="16" fill="%23666" text-anchor="middle" dominant-baseline="middle"%3Eصورة غير متوفرة%3C/text%3E%3C/svg%3E';
+                        };
                     }
                     
                     const thumbnail = document.createElement('img');
@@ -1002,19 +954,8 @@
                         document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
                         thumbnail.classList.add('active');
                     };
-                    thumbnailsContainer.appendChild(thumbnail);
-                } else if (media.type === 'video') {
-                    if (index === 0) {
-                        mainImage.src = media.poster;
-                    }
-                    
-                    const thumbnail = document.createElement('img');
-                    thumbnail.src = media.poster;
-                    thumbnail.className = `thumbnail ${index === 0 ? 'active' : ''}`;
-                    thumbnail.onclick = () => {
-                        mainImage.src = media.poster;
-                        document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
-                        thumbnail.classList.add('active');
+                    thumbnail.onerror = function() {
+                        this.src = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect width="100" height="100" fill="%23eee"/%3E%3Ctext x="50" y="50" font-family="sans-serif" font-size="16" fill="%23666" text-anchor="middle" dominant-baseline="middle"%3Eصورة غير متوفرة%3C/text%3E%3C/svg%3E';
                     };
                     thumbnailsContainer.appendChild(thumbnail);
                 }
@@ -1076,6 +1017,12 @@
                 closeModal();
             }
         }
+
+        // عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            displayProducts(products);
+            setupEventListeners();
+        });
     </script>
 </body>
 </html>
