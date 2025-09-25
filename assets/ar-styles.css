@@ -1,0 +1,25 @@
+/* Non-intrusive styles for Arabic mode, modals and mobile grid */
+body.arabic-enabled{direction:rtl;}
+body.arabic-enabled .taza-modal-inner{text-align:right}
+
+.taza-modal{position:fixed;left:0;right:0;top:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);z-index:10000}
+.taza-modal.hidden{display:none}
+.taza-modal .taza-modal-inner{background:#fff;padding:20px;border-radius:8px;max-width:420px;width:90%;box-shadow:0 6px 24px rgba(0,0,0,0.2)}
+.taza-modal .taza-modal-close{position:absolute;right:10px;top:6px;border:none;background:transparent;font-size:22px}
+
+/* contact social list simple styling */
+.social-list{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.social-list .social{display:inline-block;padding:8px 10px;border-radius:6px;background:#eee;text-decoration:none;color:#222}
+
+/* mobile 3-column grid for product lists (.product-grid .product assumed pattern) */
+@media (max-width: 600px){
+  .product-grid{display:flex;flex-wrap:wrap;margin:-6px}
+  .product-grid .product{width:calc(33.333% - 12px);margin:6px}
+  .product-card{font-size:13px}
+}
+
+/* ensure filter panels are hidden on mobile unless explicitly opened by adding .open */
+@media (max-width:768px){
+  .filter-panel, .filters, .mobile-filter{display:none !important}
+  .filter-panel.open, .filters.open{display:block !important}
+}
